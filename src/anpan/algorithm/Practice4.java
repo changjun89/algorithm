@@ -1,8 +1,11 @@
 package anpan.algorithm;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class Practice4 {
 	
@@ -12,16 +15,42 @@ public class Practice4 {
 	
 	public static int[] solution(String[] genres, int[] plays) {
 		
-		HashMap<String,Integer> genreTotal = new HashMap<String,Integer>();
-		genreTotal.
-		
-		for(int i=0; i<genres.length; i++) {
-        	genreTotal.put(genres[i], genreTotal.getOrDefault(genres[i],0)+plays[i]);
-        	
+		Map<Integer, String> genreMap = new HashMap<>(); // 고유번호, 장르
+		Map<Integer, Integer> playMap = new HashMap<>(); // 고유번호 플레이수
+		Map<String, Integer> sortedGenreMap = new TreeMap<>(); // 장르 누적플레이수
+        for (int i = 0; i < plays.length; i++) {
+            genreMap.put(i, genres[i]);
+            playMap.put(i, plays[i]);
+            sortedGenreMap.put(genres[i],
+                    sortedGenreMap.containsKey(genres[i]) ? sortedGenreMap.get(genres[i]) + plays[i] : plays[i]);
         }
-        
-        
-		int[] answer = {};
+ 
+        List<Integer> list = new ArrayList<>();
+        sortedGenreMap.keySet().stream()
+                .sorted((o1, o2) -> sortedGenreMap.get(o2) - sortedGenreMap.get(o1))
+                .forEach(genre -> {
+                    genreMap.keySet().stream()
+                            .filter(key -> genreMap.get(key).equals(genre))
+                            .map(key -> playMap.get(key))
+                            .sorted(Collections.reverseOrder())
+                            .limit(2)
+                            .forEach(value -> {
+                                playMap.keySet().stream()
+                                        .filter(v -> playMap.get(v).equals(value))
+                                        .limit(1)
+                                        .forEach(result -> {
+                                            list.add(result);
+                                            playMap.put(result, -1);
+                                        });
+                            });
+                }
+        );
+        int[] answer = new int[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            answer[i] = list.get(i);
+            System.out.println( answer[i]);
+        }
+ 
         return answer;
     }
 
