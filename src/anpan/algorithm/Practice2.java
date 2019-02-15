@@ -56,12 +56,10 @@ public class Practice2 {
              while(it.hasNext())
              {
                  String def = (String) it.next();
-
                  if(def.startsWith(tel) && def.equals(tel) == false)
                      return false;
              }
          }
-
          return answer;
      }
 	

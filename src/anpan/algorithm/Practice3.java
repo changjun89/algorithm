@@ -22,7 +22,6 @@ public class Practice3 {
         answer = numMulCase -1;
         return answer;
     }
-    
     public static void main(String[] args) {
     	System.out.println(solution(arg));
 	}
